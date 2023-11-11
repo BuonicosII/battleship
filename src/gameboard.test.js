@@ -1,9 +1,18 @@
-import Gameboard from './gameboard.js';
+import { Gameboard } from './gameboard.js';
+
+test('Test board implementation', () => {
+
+    const gameboardTest = new Gameboard();
+    gameboardTest.placeShip("destroyer", "horizontally", "A", 1);
+
+
+    expect(gameboardTest.board[0].containsShip).not.toBe(null);
+});
 
 test('Test receive attack', () => {
 
-    const gameboardTest = new Gameboard;
-    gameboardTest.placeShip("destroyer", "horizontally", 1, 1);
+    const gameboardTest = new Gameboard();
+    gameboardTest.placeShip("destroyer", "horizontally", "A", 1);
 
-    expect(gameboardTest.receiveAttack(1, 1)).toBe("HIT");
+    expect(gameboardTest.receiveAttack("A", 1)).toBe("HIT");
 });

@@ -42,7 +42,11 @@ class Ship {
 
     getHits() {
         return this.#hits
-    } 
+    }
+    
+    getLength() {
+        return this.#length
+    }
 
 
 }
