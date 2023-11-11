@@ -22,14 +22,16 @@ class Gameboard {
 
         if (direction === "horizontally") {
 
-            for (let i = x; i <= (ship.getLength()); i++) {
-                let square = this.board.find(({ coordinates }) => coordinates === `${y}${x}`);
+            for (let i = x; i <= (x + ship.getLength()); i++) {
+                let square = this.board.find(({ coordinates }) => coordinates === `${y}${i}`);
                 square.containsShip = ship;
             }
 
         } else if (direction === "vertically") {
 
-            for (let i = this.#alphabetArray.findIndex((letter) => letter === y) ; i <= (ship.getLength()); i++) {
+            const index = this.#alphabetArray.findIndex((letter) => letter === y)
+
+            for (let i = index; i <= (index + ship.getLength()); i++) {
                 let square = this.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[i]}${x}`);
                 square.containsShip = ship;
             }
@@ -41,14 +43,26 @@ class Gameboard {
     receiveAttack(y, x) {
         let square = this.board.find(({ coordinates }) => coordinates === `${y}${x}`);
 
-        if (square.containsShip === null) {
+        if (square.shot === "Shot") {
+            return "You already fired at these coordinates!"
+        } else if (square.containsShip === null) {
             square.shot = "Shot";
-            return "MISS"
+            return "MISS";
         } else {
             square.containsShip.hit();
             square.shot = "Shot";
             return "HIT";
         }
+    }
+
+    checkEndGame() {
+        for (const square of this.board) {
+            if (square.containsShip !== null && square.containsShip.isSunk() === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
