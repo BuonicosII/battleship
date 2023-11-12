@@ -14,6 +14,20 @@ class Player {
         this.board = new Gameboard()
     }
 
+    aiMove(enemy) {
+        if (this.#human === false) {
+            let randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
+
+            while (randomcoordinates.shot === "Shot") {
+                randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
+            }
+
+            let coordinatesArray = randomcoordinates.coordinates.split('');
+
+            return enemy.receiveAttack(coordinatesArray[0], coordinatesArray[1])
+        }
+    }
+
 }
 
 export { Player }
