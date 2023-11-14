@@ -14,6 +14,10 @@ class Player {
         this.board = new Gameboard()
     }
 
+    isHuman() {
+            return this.#human
+        }
+
     aiMove(enemy) {
         if (this.#human === false) {
             let randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
