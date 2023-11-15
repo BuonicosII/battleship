@@ -1,3 +1,5 @@
+import { Player } from './player.js'
+
 class Game {
 
     constructor () {
@@ -26,10 +28,14 @@ class Game {
     }
 
     attack(y, x) {
-        if (this.opponent.board.receiveAttack(y, x) === "You already fired at these coordinates!") {
-            return this.opponent.board.receiveAttack(y, x);
+
+        const attackAction = this.opponent.board.receiveAttack(y, x)
+
+        if (attackAction === "You already fired at these coordinates!") {
+            return attackAction;
+        } else if (attackAction === "HIT" && this.gameCheckForVictory()) {
+            return  `HIT! ${this.currentPlayer.name} WON!`
         } else {
-            let attack = this.opponent.board.receiveAttack(y, x);
             if (this.opponent === this.playerTwo) {
                 this.opponent = this.playerOne
                 this.currentPlayer = this.playerTwo
@@ -37,21 +43,22 @@ class Game {
                 this.opponent = this.playerTwo
                 this.currentPlayer = this.playerOne
             }
-            return attack
+            return attackAction
         }  
 
     }
 
     aiAttack() {
-        let aittack = this.currentPlayer.aiMove(this.opponent);
-        this.currentPlayer = this.playerOne
-        this.opponent = this.playerTwo
-        return aittack
+        const aittack = this.currentPlayer.aiMove(this.opponent.board);
+        if (aittack === "HIT" && this.gameCheckForVictory()) {
+            return  `HIT! ${this.currentPlayer.name} WON!`
+        } else {
+            this.currentPlayer = this.playerOne
+            this.opponent = this.playerTwo   
+            return aittack
+        }
     }
 
-
-
-
-
-
 }
+
+export { Game }
