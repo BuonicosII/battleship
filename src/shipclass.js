@@ -3,27 +3,8 @@ class Ship {
     #length
     #hits
 
-    constructor (shipclass) {
-
-        switch (shipclass) {
-
-            case "patrol boat":
-                this.#length = 2;
-                break;
-            case "submarine":
-                this.#length = 3;
-                break;
-            case "destroyer":
-                this.#length = 3;
-                break;
-            case "battleship":
-                this.#length = 4;
-                break;
-            case "carrier":
-                this.#length = 5;
-                break;
-        }
-
+    constructor (length) {
+        this.#length = length
         this.#hits = 0;
     }
 

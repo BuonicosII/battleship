@@ -6,7 +6,7 @@ test('Test player implementation', () => {
 
     const playerTwo = new Player("Two", "human");
 
-    playerTwo.board.placeShip("carrier", "horizontally", "E", 2);
+    playerTwo.board.placeShip(5, "horizontally", "E", 2);
 
     expect(playerTwo.board.receiveAttack("E", 2)).toBe("HIT");
 });
@@ -17,7 +17,7 @@ test('Test ai implementation', () => {
 
     const playerTwo = new Player("AI");
 
-    playerOne.board.placeShip("carrier", "horizontally", "E", 2);
+    playerOne.board.placeShip(5, "horizontally", "E", 2);
 
     
 

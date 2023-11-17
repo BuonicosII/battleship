@@ -17,12 +17,13 @@ class Gameboard {
         }
     }
 
-    placeShip(shipClass, direction, y, x) {
-        const ship = new Ship(shipClass);
+
+    placeShip(length, direction, y, x) {
+        const ship = new Ship(length);
 
         if (direction === "horizontally") {
 
-            for (let i = x; i <= (x + ship.getLength()); i++) {
+            for (let i = x; i <= (x + length); i++) {
                 let square = this.board.find(({ coordinates }) => coordinates === `${y}${i}`);
                 square.containsShip = ship;
             }
@@ -31,7 +32,7 @@ class Gameboard {
 
             const index = this.#alphabetArray.findIndex((letter) => letter === y)
 
-            for (let i = index; i <= (index + ship.getLength()); i++) {
+            for (let i = index; i <= (index + length); i++) {
                 let square = this.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[i]}${x}`);
                 square.containsShip = ship;
             }

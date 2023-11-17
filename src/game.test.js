@@ -28,8 +28,8 @@ test('Test game loop - attack', () => {
     game.createPlayerOne("Mario");
     game.createPlayerTwo("Luigi", "human");
 
-    game.playerOne.board.placeShip("carrier", "horizontally", "A", 1);
-    game.playerTwo.board.placeShip("carrier", "horizontally", "A", 1);
+    game.playerOne.board.placeShip(5, "horizontally", "A", 1);
+    game.playerTwo.board.placeShip(5, "horizontally", "A", 1);
 
     expect(game.attack("A", 1)).toBe("HIT");
 });
@@ -41,8 +41,8 @@ test('Test game loop - switch', () => {
     game.createPlayerOne("Mario");
     game.createPlayerTwo("Luigi", "human");
 
-    game.playerOne.board.placeShip("carrier", "horizontally", "A", 1);
-    game.playerTwo.board.placeShip("carrier", "horizontally", "A", 1);
+    game.playerOne.board.placeShip(5, "horizontally", "A", 1);
+    game.playerTwo.board.placeShip(5, "horizontally", "A", 1);
 
     game.attack("A", 1)
 
@@ -56,8 +56,8 @@ test('Test game loop - victory', () => {
     game.createPlayerOne("Mario");
     game.createPlayerTwo("Luigi", "human");
 
-    game.playerOne.board.placeShip("patrol boat", "horizontally", "A", 1);
-    game.playerTwo.board.placeShip("patrol boat", "horizontally", "A", 1);
+    game.playerOne.board.placeShip(2, "horizontally", "A", 1);
+    game.playerTwo.board.placeShip(2, "horizontally", "A", 1);
 
     game.attack("A", 1);
     game.attack("A", 1);
@@ -72,10 +72,10 @@ test('Test game loop - aiPlayer victory', () => {
     game.createPlayerOne("Mario");
     game.createPlayerTwo("Computer");
 
-    game.playerOne.board.placeShip("patrol boat", "horizontally", "A", 1);
-    game.playerTwo.board.placeShip("patrol boat", "horizontally", "A", 1);
+    game.playerOne.board.placeShip(2, "horizontally", "A", 1);
+    game.playerTwo.board.placeShip(2, "horizontally", "A", 1);
 
     game.attack("A", 1);
 
-    expect(game.aiAttack()).toBe("MasISS");
+    expect(game.aiAttack()).toBe("MISS");
 });
