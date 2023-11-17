@@ -46,3 +46,9 @@ test('Test endagame', () => {
 
     expect(gameboardTest.checkEndGame()).toBe(true);
 });
+
+test('Check valid placement', () => {
+    const gameboardTest = new Gameboard();
+
+    expect(gameboardTest.checkValidPlacement(5, "vertically", "G", 1)).toBe(false);
+})

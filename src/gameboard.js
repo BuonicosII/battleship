@@ -17,6 +17,22 @@ class Gameboard {
         }
     }
 
+    checkValidPlacement(length, direction, y, x) {
+        if (direction === "horizontally") {
+            if (x + length > 11) {
+                return false 
+            } else {
+                return true
+            }
+        } else if (direction === "vertically") {
+            let index = this.#alphabetArray.findIndex((letter) => letter === y)
+            if (length + index > 10) {
+                return false 
+            } else {
+                return true
+            }
+        }
+    }
 
     placeShip(length, direction, y, x) {
         const ship = new Ship(length);
