@@ -50,5 +50,7 @@ test('Test endagame', () => {
 test('Check valid placement', () => {
     const gameboardTest = new Gameboard();
 
-    expect(gameboardTest.checkValidPlacement(5, "vertically", "G", 1)).toBe(false);
+    gameboardTest.placeShip(3, "horizontally", "B", 1)
+
+    expect(gameboardTest.checkValidPlacement(5, "vertically", "A", 1)).toBe(false);
 })

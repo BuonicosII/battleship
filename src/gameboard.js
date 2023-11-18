@@ -22,13 +22,26 @@ class Gameboard {
             if (x + length > 11) {
                 return false 
             } else {
+                for (let i = x; i < (x + length); i++) {
+                    let square = this.board.find(({ coordinates }) => coordinates === `${y}${i}`);
+                    if (square.containsShip !== null) {
+                        return false
+                    }
+                }
                 return true
             }
         } else if (direction === "vertically") {
-            let index = this.#alphabetArray.findIndex((letter) => letter === y)
+            const index = this.#alphabetArray.findIndex((letter) => letter === y)
+
             if (length + index > 10) {
                 return false 
             } else {
+                for (let i = index; i < (index + length); i++) {
+                    let square = this.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[i]}${x}`);
+                    if (square.containsShip !== null) {
+                        return false
+                    }
+                }
                 return true
             }
         }
