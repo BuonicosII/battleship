@@ -52,7 +52,7 @@ class Gameboard {
 
         if (direction === "horizontally") {
 
-            for (let i = x; i <= (x + length); i++) {
+            for (let i = x; i < (x + length); i++) {
                 let square = this.board.find(({ coordinates }) => coordinates === `${y}${i}`);
                 square.containsShip = ship;
             }
@@ -61,7 +61,7 @@ class Gameboard {
 
             const index = this.#alphabetArray.findIndex((letter) => letter === y)
 
-            for (let i = index; i <= (index + length); i++) {
+            for (let i = index; i < (index + length); i++) {
                 let square = this.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[i]}${x}`);
                 square.containsShip = ship;
             }

@@ -62,3 +62,11 @@ table {
     border: solid 1px black;
     box-sizing: border-box;
 }
+
+.squareWithShip {
+    width: 5vh;
+    height: 5vh;
+    border: solid 1px black;
+    box-sizing: border-box;
+    background-color: aqua;
+}

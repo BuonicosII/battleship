@@ -5,7 +5,8 @@ const body = document.querySelector("body");
 const startButton = document.querySelector("#start");
 let game
 let shipType
-let shipDirection  
+let shipLength 
+let shipDirection = "horizontally"
 
 startButton.addEventListener("click", () => {
     game = new Game()
@@ -56,7 +57,7 @@ function playerOneForm() {
             playerTwoForm()
         } else if (game.aiGame === true) {
             game.createPlayerTwo("Computer");
-            setupGameboard(game.playerOne.board.board)
+            setupGameboard(game.playerOne.fleet, game.playerOne.board)
         }
 
     })
@@ -78,16 +79,68 @@ function playerTwoForm() {
     })
 }
 
-function setupGameboard(board) {
+function setupGameboard(fleet, board) {
     clearBody()
     const gameboard = document.createElement("div");
+    const fleetArray = document.createElement("div");
+
     gameboard.classList.add("bigGameboard")
+    body.appendChild(fleetArray);
     body.appendChild(gameboard);
 
-    for (const coordinates of board) {
+
+    for (const ship of fleet) {
+        const button = document.createElement("button");
+        button.textContent = ship;
+        button.addEventListener("click", () => {
+            switch (button.textContent) {
+                case "Carrier": 
+                                shipLength = 5;
+                                break;
+                case "Battleship":
+                                shipLength = 4;
+                                break;
+                case "Destroyer": 
+                                shipLength = 3;
+                                break;
+                case "Submarine":
+                                shipLength = 3;
+                                break;
+                case "Patrol Boat":
+                                shipLength = 2;
+                                break; 
+            }
+            shipType = button.textContent
+        })
+        fleetArray.appendChild(button)
+    }
+
+    for (const coordinates of board.board) {
         const square = document.createElement("div");
-        square.classList.add("square");
         square.dataset.yx = coordinates.coordinates;
+        
+        if (coordinates.containsShip !== null) {
+            square.classList.add("squareWithShip");
+        } else {
+            square.classList.add("square");
+        }
+        square.addEventListener("click", () => {
+            if (!board.checkValidPlacement(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)))) {
+                alert("Cannot place ship at these coordinates!")
+                setupGameboard(fleet, board);
+            } else if (shipType === null || shipType === undefined) {
+                alert("Select Ship First!")
+                setupGameboard(fleet, board);
+            } else {
+                board.placeShip(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
+                let placedShipIndex = fleet.indexOf(shipType);
+                fleet.splice(placedShipIndex, 1)
+                setupGameboard(fleet, board);
+                shipLength = null
+                shipType = null
+                //shipDirection = null
+            }
+        })
         gameboard.appendChild(square);
     }
 }
