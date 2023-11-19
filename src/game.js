@@ -5,6 +5,7 @@ class Game {
     constructor () {
         this.currentPlayer
         this.opponent
+        this.aiGame
     }
 
     createPlayerOne(name) {

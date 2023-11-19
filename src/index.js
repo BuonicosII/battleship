@@ -1,8 +1,11 @@
 import { Game } from "./game";
+import './style.css';
 
 const body = document.querySelector("body");
 const startButton = document.querySelector("#start");
-let game 
+let game
+let shipType
+let shipDirection  
 
 startButton.addEventListener("click", () => {
     game = new Game()
@@ -22,6 +25,7 @@ function chooseMode() {
     PlayerVsPlayer.textContent = "Play aganist another Player"
     body.appendChild(PlayerVsPlayer);
     PlayerVsPlayer.addEventListener("click", () => {
+        game.aiGame = false;
         playerOneForm();
     })
 
@@ -30,27 +34,10 @@ function chooseMode() {
     PlayerVsComputer.textContent = "Play against Computer";
     body.appendChild(PlayerVsComputer);
     PlayerVsComputer.addEventListener("click", () => {
-        playerVsAIForm();
+        game.aiGame = true
+        playerOneForm();
     })
 
-}
-
-function playerVsAIForm() {
-    clearBody()
-    const form = document.createElement("form");
-    const nameInput = document.createElement("input");
-    const button = document.createElement("button");
-    body.appendChild(form);
-    form.appendChild(nameInput);
-    form.appendChild(button);
-    button.textContent = "Create Player"
-    button.addEventListener("click", () => {
-        event.preventDefault()
-        game.createPlayerOne(nameInput.value);
-        game.createPlayerTwo("Computer")
-        console.log(game)
-        clearBody()
-    })
 }
 
 function playerOneForm() {
@@ -65,7 +52,13 @@ function playerOneForm() {
     button.addEventListener("click", () => {
         event.preventDefault()
         game.createPlayerOne(nameInput.value);
-        playerTwoForm()
+        if (game.aiGame === false) {
+            playerTwoForm()
+        } else if (game.aiGame === true) {
+            game.createPlayerTwo("Computer");
+            setupGameboard(game.playerOne.board.board)
+        }
+
     })
 }
 
@@ -81,7 +74,20 @@ function playerTwoForm() {
     button.addEventListener("click", () => {
         event.preventDefault()
         game.createPlayerTwo(nameInput.value, "human");
-        console.log(game)
-        clearBody()
+        setupGameboard(game.playerOne.board.board)
     })
+}
+
+function setupGameboard(board) {
+    clearBody()
+    const gameboard = document.createElement("div");
+    gameboard.classList.add("bigGameboard")
+    body.appendChild(gameboard);
+
+    for (const coordinates of board) {
+        const square = document.createElement("div");
+        square.classList.add("square");
+        square.dataset.yx = coordinates.coordinates;
+        gameboard.appendChild(square);
+    }
 }
