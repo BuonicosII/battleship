@@ -6,7 +6,7 @@ const startButton = document.querySelector("#start");
 let game
 let shipType
 let shipLength 
-let shipDirection = "horizontally"
+let shipDirection
 
 startButton.addEventListener("click", () => {
     game = new Game()
@@ -75,17 +75,34 @@ function playerTwoForm() {
     button.addEventListener("click", () => {
         event.preventDefault()
         game.createPlayerTwo(nameInput.value, "human");
-        setupGameboard(game.playerOne.board.board)
+        setupGameboard(game.playerOne.fleet, game.playerOne.board)
     })
 }
 
 function setupGameboard(fleet, board) {
     clearBody()
     const gameboard = document.createElement("div");
+    gameboard.classList.add("bigGameboard"); 
+
     const fleetArray = document.createElement("div");
 
-    gameboard.classList.add("bigGameboard")
+    const buttonVertical = document.createElement("button");
+    buttonVertical.textContent = "Vertically";
+    buttonVertical.addEventListener("click", () => {
+        shipDirection = "vertically";
+    });
+
+    const buttonHorizontal = document.createElement("button");
+    buttonHorizontal.textContent = "Horizontally";
+    buttonHorizontal.addEventListener("click", () => {
+        shipDirection = "horizontally";
+    })
+
+
+
     body.appendChild(fleetArray);
+    body.appendChild(buttonVertical);
+    body.appendChild(buttonHorizontal);
     body.appendChild(gameboard);
 
 
@@ -125,12 +142,36 @@ function setupGameboard(fleet, board) {
             square.classList.add("square");
         }
         square.addEventListener("click", () => {
-            if (!board.checkValidPlacement(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)))) {
-                alert("Cannot place ship at these coordinates!")
-                setupGameboard(fleet, board);
-            } else if (shipType === null || shipType === undefined) {
+            if (shipType === null || shipType === undefined)  {
                 alert("Select Ship First!")
-                setupGameboard(fleet, board);
+            } else if (shipDirection === null || shipDirection === undefined) {
+                alert("Select ship orientation!")
+            } else if (!board.checkValidPlacement(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)))) {
+                alert("Cannot place ship at these coordinates!")
+            } else if (game.playerOne.fleet.length === 1) {
+                board.placeShip(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
+                let placedShipIndex = fleet.indexOf(shipType);
+                fleet.splice(placedShipIndex, 1);
+                if (game.aiGame === false) {
+                    setupGameboard(game.playerTwo.fleet, game.playerTwo.board);
+                    shipLength = null
+                    shipType = null
+                    shipDirection = null
+                } else {
+                    setUpAiGameboard() //yettobewritten
+                    shipLength = null
+                    shipType = null
+                    shipDirection = null
+                    newTurn() //yettobewritten
+                }
+            } else if (game.playerOne.fleet.length === 0 && game.playerTwo.fleet.length === 1) {  
+                board.placeShip(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
+                let placedShipIndex = fleet.indexOf(shipType);
+                fleet.splice(placedShipIndex, 1);
+                shipLength = null
+                shipType = null
+                shipDirection = null
+                newTurn() //yettobewritten
             } else {
                 board.placeShip(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
                 let placedShipIndex = fleet.indexOf(shipType);
@@ -138,7 +179,7 @@ function setupGameboard(fleet, board) {
                 setupGameboard(fleet, board);
                 shipLength = null
                 shipType = null
-                //shipDirection = null
+                shipDirection = null
             }
         })
         gameboard.appendChild(square);
