@@ -158,11 +158,11 @@ function setupGameboard(fleet, board) {
                     shipType = null
                     shipDirection = null
                 } else {
-                    setUpAiGameboard() //yettobewritten
+                    setUpAiGameboard()
                     shipLength = null
                     shipType = null
                     shipDirection = null
-                    newTurn() //yettobewritten
+                    //newTurn() //yettobewritten
                 }
             } else if (game.playerOne.fleet.length === 0 && game.playerTwo.fleet.length === 1) {  
                 board.placeShip(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
@@ -171,7 +171,7 @@ function setupGameboard(fleet, board) {
                 shipLength = null
                 shipType = null
                 shipDirection = null
-                newTurn() //yettobewritten
+                //newTurn() //yettobewritten
             } else {
                 board.placeShip(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
                 let placedShipIndex = fleet.indexOf(shipType);
@@ -184,4 +184,73 @@ function setupGameboard(fleet, board) {
         })
         gameboard.appendChild(square);
     }
+}
+
+
+function setUpAiGameboard () {
+
+    const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+
+    while (game.playerTwo.fleet.length !== 0) {
+
+        let y = alphabet[Math.floor(Math.random() * (10))];
+        let x = Math.floor(Math.random() * (11 - 1) + 1);
+
+        if (Math.floor(Math.random() * 2) % 2 === 0) {
+            shipDirection = "vertically"
+        } else {
+            shipDirection = "horizontally"
+        }
+
+        console.log(shipDirection)
+        
+        let ship = game.playerTwo.fleet[Math.floor(Math.random() * (game.playerTwo.fleet.length))];
+
+        switch (ship) {
+            case "Carrier": 
+                            shipLength = 5;
+                            break;
+            case "Battleship":
+                            shipLength = 4;
+                            break;
+            case "Destroyer": 
+                            shipLength = 3;
+                            break;
+            case "Submarine":
+                            shipLength = 3;
+                            break;
+            case "Patrol Boat":
+                            shipLength = 2;
+                            break; 
+        }
+        
+
+        if (game.playerTwo.board.checkValidPlacement(shipLength, shipDirection, y, x)) {
+            game.playerTwo.board.placeShip(shipLength, shipDirection, y, x)
+            let placedShipIndex = game.playerTwo.fleet.indexOf(ship);
+            game.playerTwo.fleet.splice(placedShipIndex, 1)
+            shipLength = null
+            shipType = null
+            shipDirection = null
+        }
+    }
+
+    //delete after
+    clearBody()
+    const gameboard = document.createElement("div");
+    gameboard.classList.add("bigGameboard"); 
+    body.appendChild(gameboard);
+    for (const coordinates of game.playerTwo.board.board) {
+        const square = document.createElement("div");
+        square.dataset.yx = coordinates.coordinates;
+        
+        if (coordinates.containsShip !== null) {
+            square.classList.add("squareWithShip");
+        } else {
+            square.classList.add("square");
+        }
+        gameboard.appendChild(square);
+    }
+
+    
 }
