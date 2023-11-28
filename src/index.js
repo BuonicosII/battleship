@@ -162,7 +162,7 @@ function setupGameboard(fleet, board) {
                     shipLength = null
                     shipType = null
                     shipDirection = null
-                    //newTurn() //yettobewritten
+                    newTurn()
                 }
             } else if (game.playerOne.fleet.length === 0 && game.playerTwo.fleet.length === 1) {  
                 board.placeShip(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
@@ -171,7 +171,7 @@ function setupGameboard(fleet, board) {
                 shipLength = null
                 shipType = null
                 shipDirection = null
-                //newTurn() //yettobewritten
+                newTurn()
             } else {
                 board.placeShip(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
                 let placedShipIndex = fleet.indexOf(shipType);
@@ -234,23 +234,88 @@ function setUpAiGameboard () {
             shipDirection = null
         }
     }
-
-    //delete after
-    clearBody()
-    const gameboard = document.createElement("div");
-    gameboard.classList.add("bigGameboard"); 
-    body.appendChild(gameboard);
-    for (const coordinates of game.playerTwo.board.board) {
-        const square = document.createElement("div");
-        square.dataset.yx = coordinates.coordinates;
-        
-        if (coordinates.containsShip !== null) {
-            square.classList.add("squareWithShip");
-        } else {
-            square.classList.add("square");
-        }
-        gameboard.appendChild(square);
-    }
-
     
+}
+
+function newTurn() {
+    clearBody()
+    if (game.aiGame === true) {
+        //render gameboard friendly with enemy shots 
+        let friendlyGameboard = document.createElement("div");
+        friendlyGameboard.classList.add("bigGameboard");
+        body.appendChild(friendlyGameboard);
+
+        for (const coordinates of game.currentPlayer.board.board) {
+            const square = document.createElement("div");
+            
+            if (coordinates.containsShip !== null && coordinates.shot === "Shot") {
+                square.classList.add("squareWithShipHitFriendly");
+            } else if (coordinates.containsShip === null && coordinates.shot === "Shot") {
+                square.classList.add("squareHitByEnemy");
+            } else if (coordinates.containsShip !== null && coordinates.shot === null) {
+                square.classList.add("squareWithShip");
+            } else {
+                square.classList.add("square");
+            }
+            friendlyGameboard.appendChild(square)
+        }
+                
+        //render gameboard enemy with friendly shots
+        let enemyGameboard = document.createElement("div");
+        enemyGameboard.classList.add("bigGameboard");
+        body.appendChild(friendlyGameboard);
+
+        for (const coordinates of game.opponent.board.board) {
+            const square = document.createElement("div");
+            
+            if (coordinates.containsShip !== null && coordinates.shot === "Shot") {
+                square.classList.add("squareWithShipHitEnemy");
+            } else if (coordinates.containsShip === null && coordinates.shot === "Shot") {
+                square.classList.add("squareHitByFriendly");
+            } else {
+                square.classList.add("square");
+            }
+            friendlyGameboard.appendChild(square)
+            
+            //for each square add event listener with anon function with attack function
+            square.addEventListener("click", () => {
+                const attackAction = game.opponent.board.receiveAttack(coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
+                if (attackAction === "You already fired at these coordinates!") {
+                    alert(attackAction);
+                    newTurn()
+                } else if (attackAction === "HIT" && game.opponent.board.checkEndGame()) {
+                    alert(`HIT! ${game.currentPlayer.name} WON!`)
+                } else {
+                    alert(attackAction);
+                    const aittack = game.opponent.aiMove(game.currentPlayer.board);
+                    if (aittack === "HIT" && game.currentPlayer.board.checkEndGame()) {
+                        alert(`HIT! ${game.opponent.name} WON!`)
+                    } else {
+                        alert(aittack);
+                        newTurn()
+                    }
+                } 
+            })
+        }
+
+        
+
+
+        
+
+        //new turn 
+
+    //else if aigame === false 
+        //render gameboard friendly with enemy shots 
+        //render gameboard enemy with friendly shots
+        //for each square add event listener with anon function with attack function
+
+        //if already shot --> alert already shot and reload newturn with same settings
+
+        //else if hit and game won --> alert game won and end game
+
+        //else --> alert hit or miss 
+        //new turn 
+
+}
 }

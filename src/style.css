@@ -70,3 +70,35 @@ table {
     box-sizing: border-box;
     background-color: aqua;
 }
+
+.squareWithShipHitFriendly {
+    width: 5vh;
+    height: 5vh;
+    border: solid 1px black;
+    box-sizing: border-box;
+    background-color: rgb(255, 166, 0);
+}
+
+.squareHitByEnemy {
+    width: 5vh;
+    height: 5vh;
+    border: solid 1px black;
+    box-sizing: border-box;
+    background-color: rgb(104, 104, 104);
+}
+
+.squareWithShipHitEnemy {
+    width: 5vh;
+    height: 5vh;
+    border: solid 1px black;
+    box-sizing: border-box;
+    background-color: rgb(255, 0, 0);
+}
+
+.squareHitByFriendly {
+    width: 5vh;
+    height: 5vh;
+    border: solid 1px black;
+    box-sizing: border-box;
+    background-color: rgb(0, 0, 0);
+}
