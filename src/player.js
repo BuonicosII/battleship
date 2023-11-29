@@ -11,9 +11,7 @@ class Player {
         } else {
             this.#human = false;
         }
-        this.fleet = ["Carrier", "Battleship", "Battleship", "Destroyer", "Destroyer", "Destroyer", 
-                        "Submarine", "Submarine", "Submarine", "Submarine", "Patrol Boat", 
-                        "Patrol Boat", "Patrol Boat", "Patrol Boat", "Patrol Boat"]
+        this.fleet = ["Carrier", "Battleship", "Destroyer", "Submarine", "Patrol Boat"]
         this.board = new Gameboard()
     }
 
