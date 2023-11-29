@@ -134,12 +134,10 @@ function setupGameboard(fleet, board) {
 
     for (const coordinates of board.board) {
         const square = document.createElement("div");
-        square.dataset.yx = coordinates.coordinates;
+        square.classList.add("square");
         
         if (coordinates.containsShip !== null) {
             square.classList.add("squareWithShip");
-        } else {
-            square.classList.add("square");
         }
         square.addEventListener("click", () => {
             if (shipType === null || shipType === undefined)  {
@@ -242,20 +240,21 @@ function newTurn() {
     if (game.aiGame === true) {
         //render gameboard friendly with enemy shots 
         let friendlyGameboard = document.createElement("div");
-        friendlyGameboard.classList.add("bigGameboard");
+        friendlyGameboard.classList.add("smallGameboard");
         body.appendChild(friendlyGameboard);
 
         for (const coordinates of game.currentPlayer.board.board) {
             const square = document.createElement("div");
+            square.classList.add("smallSquare")
             
             if (coordinates.containsShip !== null && coordinates.shot === "Shot") {
                 square.classList.add("squareWithShipHitFriendly");
             } else if (coordinates.containsShip === null && coordinates.shot === "Shot") {
-                square.classList.add("squareHitByEnemy");
+                let pin = document.createElement("div");
+                pin.classList.add("squareHitByEnemy")
+                square.appendChild(pin);
             } else if (coordinates.containsShip !== null && coordinates.shot === null) {
                 square.classList.add("squareWithShip");
-            } else {
-                square.classList.add("square");
             }
             friendlyGameboard.appendChild(square)
         }
@@ -267,13 +266,16 @@ function newTurn() {
 
         for (const coordinates of game.opponent.board.board) {
             const square = document.createElement("div");
+            square.classList.add("square");
             
             if (coordinates.containsShip !== null && coordinates.shot === "Shot") {
-                square.classList.add("squareWithShipHitEnemy");
+                let pin = document.createElement("div");
+                pin.classList.add("squareWithShipHitEnemy")
+                square.appendChild(pin);
             } else if (coordinates.containsShip === null && coordinates.shot === "Shot") {
-                square.classList.add("squareHitByFriendly");
-            } else {
-                square.classList.add("square");
+                let pin = document.createElement("div")
+                pin.classList.add("squareHitByFriendly");
+                square.appendChild(pin);
             }
             enemyGameboard.appendChild(square)
             
@@ -352,10 +354,9 @@ function newTurn() {
                         game.opponent = game.playerTwo
                         game.currentPlayer = game.playerOne
                     }
-                        newTurn()
+                    newTurn()
                 }
                 }) 
         }
     }
 }
-
