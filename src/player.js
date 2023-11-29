@@ -29,9 +29,8 @@ class Player {
                 randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
             }
 
-            let coordinatesArray = randomcoordinates.coordinates.split('');
 
-            return enemy.receiveAttack(coordinatesArray[0], coordinatesArray[1])
+            return enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1)))
         }
     }
 
