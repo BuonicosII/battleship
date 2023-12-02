@@ -248,7 +248,10 @@ function newTurn() {
             square.classList.add("smallSquare")
             
             if (coordinates.containsShip !== null && coordinates.shot === "Shot") {
-                square.classList.add("squareWithShipHitFriendly");
+                let pin = document.createElement("div")
+                pin.classList.add("squareWithShipHitFriendly");
+                square.appendChild(pin)
+                square.classList.add("squareWithShip")
             } else if (coordinates.containsShip === null && coordinates.shot === "Shot") {
                 let pin = document.createElement("div");
                 pin.classList.add("squareHitByEnemy")
@@ -302,20 +305,24 @@ function newTurn() {
     } else {
         //render gameboard friendly with enemy shots 
         let friendlyGameboard = document.createElement("div");
-        friendlyGameboard.classList.add("bigGameboard");
+        friendlyGameboard.classList.add("smallGameboard");
         body.appendChild(friendlyGameboard);
 
         for (const coordinates of game.currentPlayer.board.board) {
             const square = document.createElement("div");
-            
+            square.classList.add("smallSquare")
+
             if (coordinates.containsShip !== null && coordinates.shot === "Shot") {
-                square.classList.add("squareWithShipHitFriendly");
+                let pin = document.createElement("div")
+                pin.classList.add("squareWithShipHitFriendly");
+                square.appendChild(pin)
+                square.classList.add("squareWithShip")
             } else if (coordinates.containsShip === null && coordinates.shot === "Shot") {
-                square.classList.add("squareHitByEnemy");
+                let pin = document.createElement("div");
+                pin.classList.add("squareHitByEnemy")
+                square.appendChild(pin);
             } else if (coordinates.containsShip !== null && coordinates.shot === null) {
                 square.classList.add("squareWithShip");
-            } else {
-                square.classList.add("square");
             }
             friendlyGameboard.appendChild(square)
         }
@@ -327,13 +334,16 @@ function newTurn() {
 
         for (const coordinates of game.opponent.board.board) {
             const square = document.createElement("div");
+            square.classList.add("square");
             
             if (coordinates.containsShip !== null && coordinates.shot === "Shot") {
-                square.classList.add("squareWithShipHitEnemy");
+                let pin = document.createElement("div");
+                pin.classList.add("squareWithShipHitEnemy")
+                square.appendChild(pin);
             } else if (coordinates.containsShip === null && coordinates.shot === "Shot") {
-                square.classList.add("squareHitByFriendly");
-            } else {
-                square.classList.add("square");
+                let pin = document.createElement("div")
+                pin.classList.add("squareHitByFriendly");
+                square.appendChild(pin);
             }
             enemyGameboard.appendChild(square)
             
