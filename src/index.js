@@ -22,8 +22,16 @@ function clearBody () {
 function chooseMode() {
     clearBody()
 
+    const instructionDiv = document.createElement("div");
+    instructionDiv.classList.add("instructionsDiv");
+    const instructions = document.createElement("h2");
+    instructions.textContent = "Choose game mode!";
+    instructionDiv.appendChild(instructions);
+    body.appendChild(instructionDiv)
+
     const PlayerVsPlayer = document.createElement("button");
-    PlayerVsPlayer.textContent = "Play aganist another Player"
+    PlayerVsPlayer.textContent = "VS Player"
+    PlayerVsPlayer.classList.add("interactiveButton")
     body.appendChild(PlayerVsPlayer);
     PlayerVsPlayer.addEventListener("click", () => {
         game.aiGame = false;
@@ -32,7 +40,8 @@ function chooseMode() {
 
 
     const PlayerVsComputer = document.createElement("button");
-    PlayerVsComputer.textContent = "Play against Computer";
+    PlayerVsComputer.textContent = "VS Computer";
+    PlayerVsComputer.classList.add("interactiveButton")
     body.appendChild(PlayerVsComputer);
     PlayerVsComputer.addEventListener("click", () => {
         game.aiGame = true
@@ -42,14 +51,26 @@ function chooseMode() {
 }
 
 function playerOneForm() {
-    clearBody()
+    clearBody();
+
+    const instructionDiv = document.createElement("div");
+    instructionDiv.classList.add("instructionsDiv");
+    const instructions = document.createElement("h2");
+    instructions.textContent = "Insert Player One Name";
+    instructionDiv.appendChild(instructions);
+    body.appendChild(instructionDiv)
+
     const form = document.createElement("form");
+    form.classList.add("centerDiv");
     const nameInput = document.createElement("input");
+    nameInput.classList.add("inputClass");
     const button = document.createElement("button");
-    button.textContent = "Create Player"
+    button.classList.add("interactiveButton");
+    button.textContent = "Create Player";
     body.appendChild(form);
     form.appendChild(nameInput);
     form.appendChild(button);
+    
     button.addEventListener("click", () => {
         event.preventDefault()
         game.createPlayerOne(nameInput.value);
@@ -57,17 +78,28 @@ function playerOneForm() {
             playerTwoForm()
         } else if (game.aiGame === true) {
             game.createPlayerTwo("Computer");
-            setupGameboard(game.playerOne.fleet, game.playerOne.board)
+            setupGameboard(game.playerOne.fleet, game.playerOne.board, game.playerOne.name)
         }
 
     })
 }
 
 function playerTwoForm() {
-    clearBody()
+    clearBody();
+
+    const instructionDiv = document.createElement("div");
+    instructionDiv.classList.add("instructionsDiv");
+    const instructions = document.createElement("h2");
+    instructions.textContent = "Insert Player Two Name";
+    instructionDiv.appendChild(instructions);
+    body.appendChild(instructionDiv)
+
     const form = document.createElement("form");
+    form.classList.add("centerDiv");
     const nameInput = document.createElement("input");
+    nameInput.classList.add("inputClass");
     const button = document.createElement("button");
+    button.classList.add("interactiveButton");
     body.appendChild(form);
     form.appendChild(nameInput);
     form.appendChild(button);
@@ -75,16 +107,25 @@ function playerTwoForm() {
     button.addEventListener("click", () => {
         event.preventDefault()
         game.createPlayerTwo(nameInput.value, "human");
-        setupGameboard(game.playerOne.fleet, game.playerOne.board)
+        setupGameboard(game.playerOne.fleet, game.playerOne.board, game.playerOne.name)
     })
 }
 
-function setupGameboard(fleet, board) {
+function setupGameboard(fleet, board, name) {
     clearBody()
+
+    const instructionDiv = document.createElement("div");
+    instructionDiv.classList.add("instructionsDiv");
+    const instructions = document.createElement("h2");
+    instructions.textContent = `${name}, place your ships!`;
+    instructionDiv.appendChild(instructions);
+    body.appendChild(instructionDiv)
+
     const gameboard = document.createElement("div");
     gameboard.classList.add("bigGameboard"); 
 
     const fleetArray = document.createElement("div");
+    fleetArray.classList.add("fleetArray");
 
     const buttonVertical = document.createElement("button");
     buttonVertical.textContent = "Vertically";
@@ -107,10 +148,34 @@ function setupGameboard(fleet, board) {
 
 
     for (const ship of fleet) {
-        const button = document.createElement("button");
-        button.textContent = ship;
-        button.addEventListener("click", () => {
-            switch (button.textContent) {
+        const div = document.createElement("div");
+        const shipName = document.createElement("h3");
+        shipName.textContent = ship;
+
+        const shipDiv = document.createElement("div");
+        switch (ship) {
+            case "Carrier": 
+                            shipDiv.classList.add("carrier")
+                            break;
+            case "Battleship":
+                            shipDiv.classList.add("battleship")
+                            break;
+            case "Destroyer": 
+                            shipDiv.classList.add("destroyer")
+                            break;
+            case "Submarine":
+                            shipDiv.classList.add("submarine")
+                            break;
+            case "Patrol Boat":
+                            shipDiv.classList.add("patrolBoat")
+                            break; 
+        }
+
+        div.appendChild(shipDiv);
+        div.appendChild(shipName);
+
+        div.addEventListener("click", () => {
+            switch (ship) {
                 case "Carrier": 
                                 shipLength = 5;
                                 break;
@@ -127,9 +192,9 @@ function setupGameboard(fleet, board) {
                                 shipLength = 2;
                                 break; 
             }
-            shipType = button.textContent
+            shipType = shipName.textContent
         })
-        fleetArray.appendChild(button)
+        fleetArray.appendChild(div)
     }
 
     for (const coordinates of board.board) {
@@ -151,7 +216,7 @@ function setupGameboard(fleet, board) {
                 let placedShipIndex = fleet.indexOf(shipType);
                 fleet.splice(placedShipIndex, 1);
                 if (game.aiGame === false) {
-                    setupGameboard(game.playerTwo.fleet, game.playerTwo.board);
+                    setupGameboard(game.playerTwo.fleet, game.playerTwo.board, game.playerTwo.name);
                     shipLength = null
                     shipType = null
                     shipDirection = null
@@ -174,7 +239,7 @@ function setupGameboard(fleet, board) {
                 board.placeShip(shipLength, shipDirection, coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
                 let placedShipIndex = fleet.indexOf(shipType);
                 fleet.splice(placedShipIndex, 1)
-                setupGameboard(fleet, board);
+                setupGameboard(fleet, board, name);
                 shipLength = null
                 shipType = null
                 shipDirection = null

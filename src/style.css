@@ -53,7 +53,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    align-items: center;
+    align-content: center;
 }
 
 .smallGameboard {
@@ -132,4 +132,82 @@ body {
     background-color: rgb(0, 110, 255);
     box-sizing: border-box;
     border: solid calc(2.5vh/4) rgb(255, 255, 255) 
+}
+
+h1 {
+    font-size: 5vh;
+}
+
+h2 {
+    font-size: 3vh;
+}
+
+h3 {
+    font-size: 1vh;
+}
+
+.interactiveButton {
+    appearance: none;
+    color: white;
+    background-color: rgb(0, 110, 255);
+    padding: 2vh;
+    border-radius: 1vh;
+    border: none;
+    font-size: 2vh;
+    font-weight: bold;
+}
+
+.inputClass {
+    appearance: none;
+    color: black;
+    padding: 2vh;
+    border-radius: 1vh;
+    border: solid 2px black;
+    font-size: 2vh;
+}
+
+.centerDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+    align-items: center;
+}
+
+.instructionsDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 30vh;
+    width: 100%;
+}
+
+.carrier {
+    height: 2.5vh;
+    width: 12.5vh;
+    background-color: rgb(100, 100, 100);
+}
+
+.battleship {
+    height: 2.5vh;
+    width: 10vh;
+    background-color: rgb(100, 100, 100);
+}
+
+.destroyer, .submarine {
+    height: 2.5vh;
+    width: 7.5vh;
+    background-color: rgb(100, 100, 100);
+}
+
+.patrolBoat {
+    height: 2.5vh;
+    width: 5vh;
+    background-color: rgb(100, 100, 100);
+}
+
+.fleetArray {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5vh;
+    align-items: start;
 }
