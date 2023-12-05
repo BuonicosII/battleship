@@ -78,7 +78,8 @@ function playerOneForm() {
             playerTwoForm()
         } else if (game.aiGame === true) {
             game.createPlayerTwo("Computer");
-            setupGameboard(game.playerOne.fleet, game.playerOne.board, game.playerOne.name)
+            setupGameboard(game.playerOne.fleet, game.playerOne.board, game.playerOne.name);
+
         }
 
     })
@@ -127,14 +128,19 @@ function setupGameboard(fleet, board, name) {
     const fleetArray = document.createElement("div");
     fleetArray.classList.add("fleetArray");
 
+    const buttonHolder = document.createElement("div");
+    buttonHolder.classList.add("centerDiv");
+
     const buttonVertical = document.createElement("button");
-    buttonVertical.textContent = "Vertically";
+    buttonVertical.textContent = "⬇";
+    buttonVertical.classList.add("interactiveButton")
     buttonVertical.addEventListener("click", () => {
         shipDirection = "vertically";
     });
 
     const buttonHorizontal = document.createElement("button");
-    buttonHorizontal.textContent = "Horizontally";
+    buttonHorizontal.textContent = "➡";
+    buttonHorizontal.classList.add("interactiveButton")
     buttonHorizontal.addEventListener("click", () => {
         shipDirection = "horizontally";
     })
@@ -142,13 +148,15 @@ function setupGameboard(fleet, board, name) {
 
 
     body.appendChild(fleetArray);
-    body.appendChild(buttonVertical);
-    body.appendChild(buttonHorizontal);
+    body.appendChild(buttonHolder);
+    buttonHolder.appendChild(buttonHorizontal);
+    buttonHolder.appendChild(buttonVertical);
     body.appendChild(gameboard);
 
 
     for (const ship of fleet) {
         const div = document.createElement("div");
+        div.classList.add("flexContainer")
         const shipName = document.createElement("h3");
         shipName.textContent = ship;
 
@@ -264,8 +272,6 @@ function setUpAiGameboard () {
         } else {
             shipDirection = "horizontally"
         }
-
-        console.log(shipDirection)
         
         let ship = game.playerTwo.fleet[Math.floor(Math.random() * (game.playerTwo.fleet.length))];
 
@@ -304,9 +310,17 @@ function newTurn() {
     clearBody()
     if (game.aiGame === true) {
         //render gameboard friendly with enemy shots 
+        let firstDiv = document.createElement("div");
+        firstDiv.classList.add("centerDiv")
+        body.appendChild(firstDiv);
+
+        let header = document.createElement("h3");
+        header.textContent = `Your board`;
+        firstDiv.appendChild(header);
+
         let friendlyGameboard = document.createElement("div");
         friendlyGameboard.classList.add("smallGameboard");
-        body.appendChild(friendlyGameboard);
+        firstDiv.appendChild(friendlyGameboard);
 
         for (const coordinates of game.currentPlayer.board.board) {
             const square = document.createElement("div");
@@ -328,9 +342,17 @@ function newTurn() {
         }
                 
         //render gameboard enemy with friendly shots
+        let secondDiv = document.createElement("div");
+        secondDiv.classList.add("centerDiv")
+        body.appendChild(secondDiv);
+
+        let enemyHeader = document.createElement("h2");
+        enemyHeader.textContent = `${game.opponent.name}'s board`;
+        secondDiv.appendChild(enemyHeader);
+
         let enemyGameboard = document.createElement("div");
         enemyGameboard.classList.add("bigGameboard");
-        body.appendChild(enemyGameboard);
+        secondDiv.appendChild(enemyGameboard);
 
         for (const coordinates of game.opponent.board.board) {
             const square = document.createElement("div");
@@ -369,9 +391,18 @@ function newTurn() {
         }
     } else {
         //render gameboard friendly with enemy shots 
+        let firstDiv = document.createElement("div");
+        firstDiv.classList.add("centerDiv")
+        body.appendChild(firstDiv);
+
+        let header = document.createElement("h3");
+        header.textContent = `Your board`;
+        firstDiv.appendChild(header);
+
+
         let friendlyGameboard = document.createElement("div");
         friendlyGameboard.classList.add("smallGameboard");
-        body.appendChild(friendlyGameboard);
+        firstDiv.appendChild(friendlyGameboard);
 
         for (const coordinates of game.currentPlayer.board.board) {
             const square = document.createElement("div");
@@ -393,9 +424,17 @@ function newTurn() {
         }
                 
         //render gameboard enemy with friendly shots
+        let secondDiv = document.createElement("div");
+        secondDiv.classList.add("centerDiv")
+        body.appendChild(secondDiv);
+
+        let enemyHeader = document.createElement("h2");
+        enemyHeader.textContent = `${game.opponent.name}'s board`;
+        secondDiv.appendChild(enemyHeader);
+
         let enemyGameboard = document.createElement("div");
         enemyGameboard.classList.add("bigGameboard");
-        body.appendChild(enemyGameboard);
+        secondDiv.appendChild(enemyGameboard);
 
         for (const coordinates of game.opponent.board.board) {
             const square = document.createElement("div");
@@ -429,9 +468,33 @@ function newTurn() {
                         game.opponent = game.playerTwo
                         game.currentPlayer = game.playerOne
                     }
-                    newTurn()
+                    phoneHandover()
                 }
                 }) 
         }
     }
+}
+
+function phoneHandover() {
+    let screen = document.createElement("div");
+    screen.classList.add("screen");
+    body.appendChild(screen);
+
+    let centralDiv = document.createElement("div");
+    centralDiv.classList.add("centerDiv");
+    screen.appendChild(centralDiv);
+
+    let instructions = document.createElement("h2");
+    instructions.textContent = `It's ${game.currentPlayer.name}'s turn. Hand over the phone`;
+
+    let button = document.createElement("button");
+    button.classList.add("interactiveButton");
+    button.textContent = 'Resume game'
+    
+    button.addEventListener("click", () => {
+        newTurn();
+    })
+
+    centralDiv.appendChild(instructions);
+    centralDiv.appendChild(button);
 }

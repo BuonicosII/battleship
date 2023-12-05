@@ -19,3 +19,13 @@ test('Test create player two', () => {
 
     expect(game.playerTwo.isHuman()).toBe(true);
 });
+
+test('Test current player', () => {
+
+    let game = new Game();
+
+    game.createPlayerOne("Mario");
+    game.createPlayerTwo("Computer")
+
+    expect(game.opponent.name).toBe("Computer");
+});
