@@ -439,18 +439,21 @@ function newTurn() {
             square.addEventListener("click", () => {
                 const attackAction = game.opponent.board.receiveAttack(coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
                 if (attackAction === "You already fired at these coordinates!") {
-                    alert(attackAction);
-                    newTurn()
+                    showMessage(attackAction);
+                    setTimeout(newTurn, 2000)
                 } else if (attackAction === "HIT" && game.opponent.board.checkEndGame()) {
-                    alert(`HIT! ${game.currentPlayer.name} WON!`)
+                    showMessage(`HIT! ${game.currentPlayer.name} WON!`)
                 } else {
-                    alert(attackAction);
+                    showMessage(attackAction);
                     const aittack = game.opponent.aiMove(game.currentPlayer.board);
                     if (aittack === "HIT" && game.currentPlayer.board.checkEndGame()) {
-                        alert(`HIT! ${game.opponent.name} WON!`)
+                        showMessage(`HIT! ${game.opponent.name} WON!`)
                     } else {
-                        alert(aittack);
-                        newTurn()
+                        setTimeout(()=> {
+                            showMessage(aittack);
+                            setTimeout(newTurn, 2000);
+                        }, 2000);
+                        
                     }
                 } 
             })
@@ -521,12 +524,12 @@ function newTurn() {
             square.addEventListener("click", () => {
                 const attackAction = game.opponent.board.receiveAttack(coordinates.coordinates.slice(0, 1), Number(coordinates.coordinates.slice(1)));
                 if (attackAction === "You already fired at these coordinates!") {
-                    alert(attackAction);
-                    newTurn()
+                    showMessage(attackAction);
+                    setTimeout(newTurn, 2000)
                 } else if (attackAction === "HIT" && game.opponent.board.checkEndGame()) {
-                    alert(`HIT! ${game.currentPlayer.name} WON!`)
+                    showMessage(`HIT! ${game.currentPlayer.name} WON!`)
                 } else {
-                    alert(attackAction);
+                    showMessage(attackAction);
                     if (game.opponent === game.playerTwo) {
                         game.opponent = game.playerOne
                         game.currentPlayer = game.playerTwo
@@ -534,7 +537,7 @@ function newTurn() {
                         game.opponent = game.playerTwo
                         game.currentPlayer = game.playerOne
                     }
-                    phoneHandover()
+                    setTimeout(phoneHandover, 2000)
                 }
                 }) 
         }
@@ -565,3 +568,24 @@ function phoneHandover() {
     centralDiv.appendChild(button);
 }
 
+function showMessage(message) {
+
+    for (const child of body.children) {
+        if (child.classList.contains("popupScreen")) {
+            body.removeChild(child)
+        }
+    }
+
+    let screen = document.createElement("div");
+    screen.classList.add("popupScreen");
+    body.appendChild(screen)
+
+    let popup = document.createElement("div");
+    popup.classList.add("centerDiv");
+    popup.setAttribute("style", "background-color: white");
+    screen.appendChild(popup)
+
+    let messageHeader = document.createElement("h3");
+    messageHeader.textContent = message;
+    popup.appendChild(messageHeader)
+}
