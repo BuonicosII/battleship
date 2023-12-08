@@ -275,6 +275,9 @@ function setupGameboard(fleet, board, name) {
                 if (child.classList.contains("placeableShip")) {
                     child.classList.remove("placeableShip")
                 }
+                if (child.classList.contains("unplaceableShip")) {
+                    child.classList.remove("unplaceableShip")
+                }
             }
 
             let x = Number(coordinates.coordinates.slice(1));
@@ -282,19 +285,37 @@ function setupGameboard(fleet, board, name) {
 
             if (shipDirection === "horizontally") {
 
-                for (let i = x; i < (x + shipLength); i++) {
-                    let hoveredSquare = document.querySelector(`[data-coordinates="${y}${i}"]`);
-                    hoveredSquare.classList.add("placeableShip");
+                if (!board.checkValidPlacement(shipLength, shipDirection, y, x)) {
+                    for (let i = x; i < (x + shipLength); i++) {
+                        let hoveredSquare = document.querySelector(`[data-coordinates="${y}${i}"]`);
+                        hoveredSquare.classList.add("unplaceableShip");
+                    }
+                } else {
+                    for (let i = x; i < (x + shipLength); i++) {
+                        let hoveredSquare = document.querySelector(`[data-coordinates="${y}${i}"]`);
+                        hoveredSquare.classList.add("placeableShip");
+                    }
                 }
+
+
     
             } else if (shipDirection === "vertically") {
     
                 const index = alphabetArray.findIndex((letter) => letter === y)
-    
-                for (let i = index; i < (index + shipLength); i++) {
-                    let hoveredSquare = document.querySelector(`[data-coordinates="${alphabetArray[i]}${x}"]`)
-                    hoveredSquare.classList.add("placeableShip");
+
+                if (!board.checkValidPlacement(shipLength, shipDirection, y, x)) {
+                    for (let i = index; i < (index + shipLength); i++) {
+                        let hoveredSquare = document.querySelector(`[data-coordinates="${alphabetArray[i]}${x}"]`)
+                        hoveredSquare.classList.add("unplaceableShip");
+                    }
+                } else {
+                    for (let i = index; i < (index + shipLength); i++) {
+                        let hoveredSquare = document.querySelector(`[data-coordinates="${alphabetArray[i]}${x}"]`)
+                        hoveredSquare.classList.add("placeableShip");
+                    }
                 }
+    
+
     
             }
         })
@@ -543,3 +564,4 @@ function phoneHandover() {
     centralDiv.appendChild(instructions);
     centralDiv.appendChild(button);
 }
+
