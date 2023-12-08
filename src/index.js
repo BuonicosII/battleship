@@ -7,6 +7,7 @@ let game
 let shipType
 let shipLength 
 let shipDirection
+let alphabetArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 
 startButton.addEventListener("click", () => {
     game = new Game()
@@ -136,6 +137,10 @@ function setupGameboard(fleet, board, name) {
     buttonVertical.classList.add("interactiveButton")
     buttonVertical.addEventListener("click", () => {
         shipDirection = "vertically";
+        buttonVertical.classList.add("orientationSelected");
+        if (buttonHorizontal.classList.contains("orientationSelected")) {
+            buttonHorizontal.classList.remove("orientationSelected");
+        }
     });
 
     const buttonHorizontal = document.createElement("button");
@@ -143,6 +148,10 @@ function setupGameboard(fleet, board, name) {
     buttonHorizontal.classList.add("interactiveButton")
     buttonHorizontal.addEventListener("click", () => {
         shipDirection = "horizontally";
+        buttonHorizontal.classList.add("orientationSelected");
+        if (buttonVertical.classList.contains("orientationSelected")) {
+            buttonVertical.classList.remove("orientationSelected");
+        }
     })
 
 
@@ -200,13 +209,20 @@ function setupGameboard(fleet, board, name) {
                                 shipLength = 2;
                                 break; 
             }
-            shipType = shipName.textContent
+            shipType = shipName.textContent;
+            for (const child of fleetArray.children) {
+                if (child.classList.contains("shipSelected")) {
+                    child.classList.remove("shipSelected");
+                }
+            }
+            div.classList.add("shipSelected")
         })
         fleetArray.appendChild(div)
     }
 
     for (const coordinates of board.board) {
         const square = document.createElement("div");
+        square.dataset.coordinates = coordinates.coordinates
         square.classList.add("square");
         
         if (coordinates.containsShip !== null) {
@@ -251,6 +267,35 @@ function setupGameboard(fleet, board, name) {
                 shipLength = null
                 shipType = null
                 shipDirection = null
+            }
+        });
+        square.addEventListener("mouseover", () => {
+
+            for (const child of gameboard.children) {
+                if (child.classList.contains("placeableShip")) {
+                    child.classList.remove("placeableShip")
+                }
+            }
+
+            let x = Number(coordinates.coordinates.slice(1));
+            let y = coordinates.coordinates.slice(0, 1);
+
+            if (shipDirection === "horizontally") {
+
+                for (let i = x; i < (x + shipLength); i++) {
+                    let hoveredSquare = document.querySelector(`[data-coordinates="${y}${i}"]`);
+                    hoveredSquare.classList.add("placeableShip");
+                }
+    
+            } else if (shipDirection === "vertically") {
+    
+                const index = alphabetArray.findIndex((letter) => letter === y)
+    
+                for (let i = index; i < (index + shipLength); i++) {
+                    let hoveredSquare = document.querySelector(`[data-coordinates="${alphabetArray[i]}${x}"]`)
+                    hoveredSquare.classList.add("placeableShip");
+                }
+    
             }
         })
         gameboard.appendChild(square);
