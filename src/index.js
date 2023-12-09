@@ -442,12 +442,15 @@ function newTurn() {
                     showMessage(attackAction);
                     setTimeout(newTurn, 2000)
                 } else if (attackAction === "HIT" && game.opponent.board.checkEndGame()) {
-                    showMessage(`HIT! ${game.currentPlayer.name} WON!`)
+                    let pin = document.createElement("div");
+                    pin.classList.add("squareWithShipHitEnemy")
+                    square.appendChild(pin);
+                    showEndMessage(`HIT! ${game.currentPlayer.name} WON!`)
                 } else {
                     showMessage(attackAction);
                     const aittack = game.opponent.aiMove(game.currentPlayer.board);
                     if (aittack === "HIT" && game.currentPlayer.board.checkEndGame()) {
-                        showMessage(`HIT! ${game.opponent.name} WON!`)
+                        showEndMessage(`HIT! ${game.opponent.name} WON!`)
                     } else {
                         setTimeout(()=> {
                             showMessage(aittack);
@@ -467,7 +470,6 @@ function newTurn() {
         let header = document.createElement("h3");
         header.textContent = `Your board`;
         firstDiv.appendChild(header);
-
 
         let friendlyGameboard = document.createElement("div");
         friendlyGameboard.classList.add("smallGameboard");
@@ -527,7 +529,10 @@ function newTurn() {
                     showMessage(attackAction);
                     setTimeout(newTurn, 2000)
                 } else if (attackAction === "HIT" && game.opponent.board.checkEndGame()) {
-                    showMessage(`HIT! ${game.currentPlayer.name} WON!`)
+                    let pin = document.createElement("div");
+                    pin.classList.add("squareWithShipHitEnemy")
+                    square.appendChild(pin);
+                    showEndMessage(`HIT! ${game.currentPlayer.name} WON!`)
                 } else {
                     showMessage(attackAction);
                     if (game.opponent === game.playerTwo) {
@@ -581,11 +586,48 @@ function showMessage(message) {
     body.appendChild(screen)
 
     let popup = document.createElement("div");
-    popup.classList.add("centerDiv");
-    popup.setAttribute("style", "background-color: white");
+    popup.classList.add("popup");
     screen.appendChild(popup)
+    setTimeout(() => {
+        popup.classList.toggle("popUpDropdown");
+    }, 100)
 
     let messageHeader = document.createElement("h3");
     messageHeader.textContent = message;
-    popup.appendChild(messageHeader)
+    popup.appendChild(messageHeader);
+
+    setTimeout(() => {
+        popup.classList.toggle("popUpDropdown");
+    }, 1500)
+}
+
+function showEndMessage(message) {
+
+    for (const child of body.children) {
+        if (child.classList.contains("popupScreen")) {
+            body.removeChild(child)
+        }
+    }
+
+    let screen = document.createElement("div");
+    screen.classList.add("popupScreen");
+    body.appendChild(screen)
+
+    let popup = document.createElement("div");
+    popup.classList.add("popup");
+    screen.appendChild(popup)
+    setTimeout(() => {
+        popup.classList.toggle("popUpDropdown");
+    }, 100)
+
+    let messageHeader = document.createElement("h3");
+    messageHeader.textContent = message;
+    popup.appendChild(messageHeader);
+
+    let playAgainButton = document.createElement("button");
+    playAgainButton.textContent = "New Game";
+    playAgainButton.classList.add("interactiveButton");
+    playAgainButton.addEventListener("click", () => {
+        location.reload()
+    })
 }
