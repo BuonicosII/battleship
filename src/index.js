@@ -390,13 +390,14 @@ function newTurn() {
 
         for (const coordinates of game.currentPlayer.board.board) {
             const square = document.createElement("div");
+            square.dataset.coordinates = coordinates.coordinates
             square.classList.add("smallSquare")
             
             if (coordinates.containsShip !== null && coordinates.shot === "Shot") {
-                let pin = document.createElement("div")
+                let pin = document.createElement("div");
                 pin.classList.add("squareWithShipHitFriendly");
+                square.classList.add("squareWithShip");
                 square.appendChild(pin)
-                square.classList.add("squareWithShip")
             } else if (coordinates.containsShip === null && coordinates.shot === "Shot") {
                 let pin = document.createElement("div");
                 pin.classList.add("squareHitByEnemy")
@@ -448,12 +449,36 @@ function newTurn() {
                     showEndMessage(`HIT! ${game.currentPlayer.name} WON!`)
                 } else {
                     showMessage(attackAction);
+                    if (attackAction === "HIT") {
+                        let pin = document.createElement("div");
+                        pin.classList.add("squareWithShipHitEnemy")
+                        square.appendChild(pin);
+                    } else if (attackAction === "MISS") {
+                        let pin = document.createElement("div");
+                        pin.classList.add("squareHitByFriendly")
+                        square.appendChild(pin);
+                    }
                     const aittack = game.opponent.aiMove(game.currentPlayer.board);
-                    if (aittack === "HIT" && game.currentPlayer.board.checkEndGame()) {
-                        showEndMessage(`HIT! ${game.opponent.name} WON!`)
+                    const hitSquare = document.querySelector(`[data-coordinates="${aittack.coordinates}"]`);
+                    if (aittack.message === "HIT" && game.currentPlayer.board.checkEndGame()) {
+                        showEndMessage(`HIT! ${game.opponent.name} WON!`);
+                        let pin = document.createElement("div")
+                        pin.classList.add("squareWithShipHitFriendly");
+                        hitSquare.classList.add("squareWithShip");
+                        hitSquare.appendChild(pin);
                     } else {
                         setTimeout(()=> {
-                            showMessage(aittack);
+                            showMessage(aittack.message);
+                            if (aittack.message === "HIT") {
+                                let pin = document.createElement("div")
+                                pin.classList.add("squareWithShipHitFriendly");
+                                hitSquare.classList.add("squareWithShip");
+                                hitSquare.appendChild(pin);
+                            } else if (aittack.message === "MISS") {
+                                let pin = document.createElement("div");
+                                pin.classList.add("squareHitByEnemy")
+                                hitSquare.appendChild(pin);
+                            }
                             setTimeout(newTurn, 2000);
                         }, 2000);
                         
@@ -535,6 +560,15 @@ function newTurn() {
                     showEndMessage(`HIT! ${game.currentPlayer.name} WON!`)
                 } else {
                     showMessage(attackAction);
+                    if (attackAction === "HIT") {
+                        let pin = document.createElement("div");
+                        pin.classList.add("squareWithShipHitEnemy")
+                        square.appendChild(pin);
+                    } else if (attackAction === "MISS") {
+                        let pin = document.createElement("div");
+                        pin.classList.add("squareHitByFriendly")
+                        square.appendChild(pin);
+                    }
                     if (game.opponent === game.playerTwo) {
                         game.opponent = game.playerOne
                         game.currentPlayer = game.playerTwo
@@ -630,4 +664,5 @@ function showEndMessage(message) {
     playAgainButton.addEventListener("click", () => {
         location.reload()
     })
+    popup.appendChild(playAgainButton)
 }

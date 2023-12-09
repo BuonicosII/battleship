@@ -27,11 +27,12 @@ class Player {
                 randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
             }
 
-
-            return enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1)))
+            return {
+                message: enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1))),
+                coordinates: randomcoordinates.coordinates
+            }
         }
     }
-
 }
 
 export { Player }
