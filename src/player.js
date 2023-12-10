@@ -3,6 +3,7 @@ import { Gameboard } from "./gameboard";
 class Player {
 
     #human
+    #alphabetArray 
 
     constructor (name, type) {
         this.name = name
@@ -13,24 +14,107 @@ class Player {
         }
         this.fleet = ["Carrier", "Battleship", "Destroyer", "Submarine", "Patrol Boat"]
         this.board = new Gameboard()
+        this.#alphabetArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+        this.previousHit
     }
 
     isHuman() {
             return this.#human
-        }
+    }
 
     aiMove(enemy) {
         if (this.#human === false) {
-            let randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
 
-            while (randomcoordinates.shot === "Shot") {
-                randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
+            if (this.previousHit !== undefined && this.previousHit.message === "HIT") {
+
+                const rightHit = enemy.board.find(({ coordinates }) => coordinates === `${this.previousHit.coordinates.slice(0, 1)}${Number(this.previousHit.coordinates.slice(1)) + 1}`);
+                const leftHit = enemy.board.find(({ coordinates }) => coordinates === `${this.previousHit.coordinates.slice(0, 1)}${Number(this.previousHit.coordinates.slice(1)) - 1}`);
+                const downHit = enemy.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[this.#alphabetArray.findIndex((letter) => letter === this.previousHit.coordinates.slice(0, 1)) - 1]}${this.previousHit.coordinates.slice(1)}`);
+                const topHit = enemy.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[this.#alphabetArray.findIndex((letter) => letter === this.previousHit.coordinates.slice(0, 1)) + 1]}${this.previousHit.coordinates.slice(1)}`);
+
+                if (
+                    (rightHit === undefined || rightHit === -1 || rightHit.shot === "Shot" ) &&
+                    (leftHit === undefined || leftHit === -1 || leftHit.shot === "Shot" ) &&
+                    (downHit === undefined || downHit === -1 || downHit.shot === "Shot" ) &&
+                    (topHit === undefined || topHit === -1 || topHit.shot === "Shot" )
+                ) {
+                    let randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
+
+                    while (randomcoordinates.shot === "Shot") {
+                        randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
+                    }
+    
+                    const aiAttackAction = enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1)));
+                    this.previousHit = {
+                        message: aiAttackAction,
+                        coordinates: randomcoordinates.coordinates
+                    }
+        
+                    return this.previousHit
+                }
+
+                let diceRoll = Math.floor(Math.random() * (5 - 1) + 1)
+                let nextHit 
+
+                switch (diceRoll) {
+                    case 1: 
+                        nextHit = rightHit;
+                        break;
+                    case 2: 
+                        nextHit = leftHit
+                        break;
+                    case 3:
+                        nextHit = downHit;
+                        break;
+                    case 4: 
+                        nextHit = topHit
+                        break;
+                }
+
+                while (nextHit === undefined || nextHit === -1 || nextHit.shot === "Shot" ) {
+                    diceRoll = Math.floor(Math.random() * (5 - 1) + 1)
+
+                    switch (diceRoll) {
+                        case 1: 
+                            nextHit = rightHit;
+                            break;
+                        case 2: 
+                            nextHit = leftHit
+                            break;
+                        case 3:
+                            nextHit = downHit
+                            break;
+                        case 4: 
+                            nextHit = topHit
+                            break;
+                    }
+                }
+
+                const aiAttackAction = enemy.receiveAttack(nextHit.coordinates.slice(0, 1), Number(nextHit.coordinates.slice(1)));
+                this.previousHit = {
+                    message: aiAttackAction,
+                    coordinates: nextHit.coordinates
+                }
+
+                return this.previousHit
+
+
+            } else {
+                let randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
+
+                while (randomcoordinates.shot === "Shot") {
+                    randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
+                }
+
+                const aiAttackAction = enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1)));
+                this.previousHit = {
+                    message: aiAttackAction,
+                    coordinates: randomcoordinates.coordinates
+                }
+    
+                return this.previousHit
             }
 
-            return {
-                message: enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1))),
-                coordinates: randomcoordinates.coordinates
-            }
         }
     }
 }

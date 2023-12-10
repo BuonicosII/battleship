@@ -271,8 +271,9 @@ h3 {
 .popup {
     display: flex;
     flex-direction: column;
-    width: 20vw;
-    height: 10vh;
+    width: 40vh;
+    height: 20vh;
+    gap: 5vh;
     justify-content: center;
     align-items: center;
     background-color: white;
