@@ -45,12 +45,20 @@ class Player {
                     }
     
                     const aiAttackAction = enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1)));
-                    this.previousHit = {
-                        message: aiAttackAction,
-                        coordinates: randomcoordinates.coordinates
+
+                    if (aiAttackAction === "HIT") {
+                        this.previousHit = {
+                            message: aiAttackAction,
+                            coordinates: randomcoordinates.coordinates
+                        }
+            
+                        return this.previousHit
+                    } else {
+                        return {
+                            message: aiAttackAction,
+                            coordinates: randomcoordinates.coordinates
+                        }
                     }
-        
-                    return this.previousHit
                 }
 
                 let diceRoll = Math.floor(Math.random() * (5 - 1) + 1)
@@ -91,12 +99,19 @@ class Player {
                 }
 
                 const aiAttackAction = enemy.receiveAttack(nextHit.coordinates.slice(0, 1), Number(nextHit.coordinates.slice(1)));
-                this.previousHit = {
-                    message: aiAttackAction,
-                    coordinates: nextHit.coordinates
+                if (aiAttackAction === "HIT") {
+                    this.previousHit = {
+                        message: aiAttackAction,
+                        coordinates: nextHit.coordinates
+                    }
+        
+                    return this.previousHit
+                } else {
+                    return {
+                        message: aiAttackAction,
+                        coordinates: nextHit.coordinates
+                    }
                 }
-
-                return this.previousHit
 
 
             } else {
@@ -107,12 +122,20 @@ class Player {
                 }
 
                 const aiAttackAction = enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1)));
-                this.previousHit = {
-                    message: aiAttackAction,
-                    coordinates: randomcoordinates.coordinates
+                
+                if (aiAttackAction === "HIT") {
+                    this.previousHit = {
+                        message: aiAttackAction,
+                        coordinates: randomcoordinates.coordinates
+                    }
+        
+                    return this.previousHit
+                } else {
+                    return {
+                        message: aiAttackAction,
+                        coordinates: randomcoordinates.coordinates
+                    }
                 }
-    
-                return this.previousHit
             }
 
         }
