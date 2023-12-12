@@ -302,3 +302,9 @@ h3 {
 .popUpDropdown {
     transform: translate(0, 25vh);
 }
+
+.credits {
+    position: absolute;
+    left: 1vh;
+    bottom: 1vh;
+}
