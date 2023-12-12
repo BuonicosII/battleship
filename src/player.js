@@ -1,9 +1,9 @@
 import { Gameboard } from "./gameboard";
+let alphabetArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 
 class Player {
 
     #human
-    #alphabetArray 
 
     constructor (name, type) {
         this.name = name
@@ -14,7 +14,6 @@ class Player {
         }
         this.fleet = ["Carrier", "Battleship", "Destroyer", "Submarine", "Patrol Boat"]
         this.board = new Gameboard()
-        this.#alphabetArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
         this.previousHit
     }
 
@@ -29,8 +28,8 @@ class Player {
 
                 const rightHit = enemy.board.find(({ coordinates }) => coordinates === `${this.previousHit.coordinates.slice(0, 1)}${Number(this.previousHit.coordinates.slice(1)) + 1}`);
                 const leftHit = enemy.board.find(({ coordinates }) => coordinates === `${this.previousHit.coordinates.slice(0, 1)}${Number(this.previousHit.coordinates.slice(1)) - 1}`);
-                const downHit = enemy.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[this.#alphabetArray.findIndex((letter) => letter === this.previousHit.coordinates.slice(0, 1)) - 1]}${this.previousHit.coordinates.slice(1)}`);
-                const topHit = enemy.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[this.#alphabetArray.findIndex((letter) => letter === this.previousHit.coordinates.slice(0, 1)) + 1]}${this.previousHit.coordinates.slice(1)}`);
+                const downHit = enemy.board.find(({ coordinates }) => coordinates === `${alphabetArray[alphabetArray.findIndex((letter) => letter === this.previousHit.coordinates.slice(0, 1)) - 1]}${this.previousHit.coordinates.slice(1)}`);
+                const topHit = enemy.board.find(({ coordinates }) => coordinates === `${alphabetArray[alphabetArray.findIndex((letter) => letter === this.previousHit.coordinates.slice(0, 1)) + 1]}${this.previousHit.coordinates.slice(1)}`);
 
                 if (
                     (rightHit === undefined || rightHit === -1 || rightHit.shot === "Shot" ) &&
@@ -47,6 +46,7 @@ class Player {
                     const aiAttackAction = enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1)));
 
                     if (aiAttackAction === "HIT") {
+
                         this.previousHit = {
                             message: aiAttackAction,
                             coordinates: randomcoordinates.coordinates
@@ -54,7 +54,9 @@ class Player {
             
                         return this.previousHit
                     } else {
+
                         return {
+
                             message: aiAttackAction,
                             coordinates: randomcoordinates.coordinates
                         }
@@ -62,6 +64,7 @@ class Player {
                 }
 
                 let diceRoll = Math.floor(Math.random() * (5 - 1) + 1)
+
                 let nextHit 
 
                 switch (diceRoll) {
@@ -80,6 +83,7 @@ class Player {
                 }
 
                 while (nextHit === undefined || nextHit === -1 || nextHit.shot === "Shot" ) {
+
                     diceRoll = Math.floor(Math.random() * (5 - 1) + 1)
 
                     switch (diceRoll) {
@@ -99,14 +103,18 @@ class Player {
                 }
 
                 const aiAttackAction = enemy.receiveAttack(nextHit.coordinates.slice(0, 1), Number(nextHit.coordinates.slice(1)));
+
                 if (aiAttackAction === "HIT") {
+
                     this.previousHit = {
                         message: aiAttackAction,
                         coordinates: nextHit.coordinates
                     }
         
                     return this.previousHit
+
                 } else {
+
                     return {
                         message: aiAttackAction,
                         coordinates: nextHit.coordinates
@@ -115,15 +123,19 @@ class Player {
 
 
             } else {
+
                 let randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
 
                 while (randomcoordinates.shot === "Shot") {
+
                     randomcoordinates = enemy.board[Math.floor(Math.random() * (100))]
+
                 }
 
                 const aiAttackAction = enemy.receiveAttack(randomcoordinates.coordinates.slice(0, 1), Number(randomcoordinates.coordinates.slice(1)));
                 
                 if (aiAttackAction === "HIT") {
+
                     this.previousHit = {
                         message: aiAttackAction,
                         coordinates: randomcoordinates.coordinates
@@ -131,6 +143,7 @@ class Player {
         
                     return this.previousHit
                 } else {
+
                     return {
                         message: aiAttackAction,
                         coordinates: randomcoordinates.coordinates

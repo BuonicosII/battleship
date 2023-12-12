@@ -1,15 +1,13 @@
 import { Ship } from "./shipclass";
+let alphabetArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 
 class Gameboard {
-
-    #alphabetArray 
 
     constructor () {
 
         this.board = new Array;
-        this.#alphabetArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
-        for (const letter of this.#alphabetArray) {
+        for (const letter of alphabetArray) {
             for (let i = 1; i <= 10; i++) {
                 let square = { coordinates: `${letter}${i}`, containsShip: null, shot: null }
                 this.board.push(square)
@@ -31,13 +29,13 @@ class Gameboard {
                 return true
             }
         } else if (direction === "vertically") {
-            const index = this.#alphabetArray.findIndex((letter) => letter === y)
+            const index = alphabetArray.findIndex((letter) => letter === y)
 
             if (length + index > 10) {
                 return false 
             } else {
                 for (let i = index; i < (index + length); i++) {
-                    let square = this.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[i]}${x}`);
+                    let square = this.board.find(({ coordinates }) => coordinates === `${alphabetArray[i]}${x}`);
                     if (square.containsShip !== null) {
                         return false
                     }
@@ -59,10 +57,10 @@ class Gameboard {
 
         } else if (direction === "vertically") {
 
-            const index = this.#alphabetArray.findIndex((letter) => letter === y)
+            const index = alphabetArray.findIndex((letter) => letter === y)
 
             for (let i = index; i < (index + length); i++) {
-                let square = this.board.find(({ coordinates }) => coordinates === `${this.#alphabetArray[i]}${x}`);
+                let square = this.board.find(({ coordinates }) => coordinates === `${alphabetArray[i]}${x}`);
                 square.containsShip = ship;
             }
 

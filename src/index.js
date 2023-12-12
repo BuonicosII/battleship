@@ -666,3 +666,5 @@ function showEndMessage(message) {
     })
     popup.appendChild(playAgainButton)
 }
+
+export { alphabetArray }
