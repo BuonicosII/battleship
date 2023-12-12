@@ -47,6 +47,13 @@ table {
 	border-spacing: 0;
 }
 
+@font-face {
+    font-family: 'MyFont';
+    src: url('./Montserrat-Medium.ttf');
+    font-weight: 600;
+    font-style: normal;
+  }
+
 body {
     height: 100vh;
     min-width: 60vh;
@@ -55,6 +62,7 @@ body {
     justify-content: space-evenly;
     align-content: center;
     gap: 5vh;
+    font-family: "MyFont";
 }
 
 .smallGameboard {
@@ -81,7 +89,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(0, 110, 255);  
+    background-color: rgb(0, 110, 255); 
+    background-image: url(./sea-waves.png);
+    background-size: contain;
 }
 
 .square {
@@ -93,10 +103,13 @@ body {
     justify-content: center;
     align-items: center;
     background-color: rgb(0, 110, 255); 
+    background-image: url(./sea-waves.png);
+    background-size: contain;
 }
 
 .squareWithShip {
     background-color: rgb(100, 100, 100);
+    background-image: none;
 }
 
 .squareWithShipHitFriendly {
@@ -282,10 +295,10 @@ h3 {
     border: solid 1px black;
     transition: transform ease-in-out 250ms;
     position: absolute;
-    top: -10vh;
+    top: -20vh;
     box-shadow: 2px 3px 5px #bdbdbd;
 }
 
 .popUpDropdown {
-    transform: translate(0, 15vh);
+    transform: translate(0, 25vh);
 }
